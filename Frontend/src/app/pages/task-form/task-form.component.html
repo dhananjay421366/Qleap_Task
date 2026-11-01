@@ -1,0 +1,68 @@
+<div class="form-container">
+  <header class="form-head">
+    <h1>{{ isEditMode ? 'Edit task' : 'Add new task' }}</h1>
+    <p class="sub">{{ isEditMode ? 'Update the details and save your changes' : 'Fill in the details to add a task to your list' }}</p>
+  </header>
+
+  <div *ngIf="error" class="error" role="alert">{{ error }}</div>
+
+  <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" novalidate>
+    <div class="form-group">
+      <label for="title">Task title <span class="req" aria-hidden="true">*</span></label>
+      <input id="title" type="text" formControlName="title" maxlength="150" autocomplete="off" placeholder="What needs to be done?" />
+      <div class="error-text" role="alert" *ngIf="taskForm.get('title')?.touched && taskForm.get('title')?.invalid">
+        Enter a title for this task
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea id="description" formControlName="description" maxlength="5000" rows="3" placeholder="Add any details that help"></textarea>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="assigned_to">Assigned to <span class="req" aria-hidden="true">*</span></label>
+        <input id="assigned_to" type="text" formControlName="assigned_to" maxlength="100" autocomplete="off" placeholder="Person's name" />
+        <div class="error-text" role="alert" *ngIf="taskForm.get('assigned_to')?.touched && taskForm.get('assigned_to')?.invalid">
+          Enter who this task is assigned to
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="priority">Priority <span class="req" aria-hidden="true">*</span></label>
+        <select id="priority" formControlName="priority">
+          <option value="Low">Low</option>
+          <option value="Medium">Medium</option>
+          <option value="High">High</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="due_date">Due date <span class="req" aria-hidden="true">*</span></label>
+        <input id="due_date" type="date" formControlName="due_date" />
+        <div class="error-text" role="alert" *ngIf="taskForm.get('due_date')?.touched && taskForm.get('due_date')?.invalid">
+          Choose a due date
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="status">Status <span class="req" aria-hidden="true">*</span></label>
+        <select id="status" formControlName="status">
+          <option value="Pending">Pending</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Completed">Completed</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary" [disabled]="loading">
+        {{ loading ? 'Saving…' : (isEditMode ? 'Update task' : 'Create task') }}
+      </button>
+      <a routerLink="/tasks" class="btn btn-secondary">Cancel</a>
+    </div>
+  </form>
+</div>

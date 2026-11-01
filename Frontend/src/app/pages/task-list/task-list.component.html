@@ -1,0 +1,90 @@
+<div class="task-list">
+  @if (pendingDeleteId !== null) {
+    <div class="modal-backdrop" (click)="cancelDelete()">
+      <section class="delete-modal" role="dialog" aria-modal="true" aria-labelledby="delete-title" (click)="$event.stopPropagation()">
+        <div class="modal-icon" aria-hidden="true">!</div>
+        <div class="modal-content">
+          <h2 id="delete-title">Delete task permanently?</h2>
+          <p>You are about to delete <strong>&ldquo;{{ pendingDeleteTitle }}&rdquo;</strong>. This task will be permanently removed and cannot be recovered.</p>
+          <div class="modal-actions">
+            <button type="button" class="btn-cancel" [disabled]="deleting" (click)="cancelDelete()">Cancel</button>
+            <button type="button" class="btn-confirm-delete" [disabled]="deleting" (click)="confirmDelete()">{{ deleting ? 'Deleting…' : 'Delete task' }}</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  }
+
+  <header class="header">
+    <div>
+      <h1>All tasks</h1>
+      <p class="sub">Search, filter and manage everything in one place</p>
+    </div>
+    <a routerLink="/tasks/add" class="btn btn-primary">+ Add task</a>
+  </header>
+
+  <div class="filters">
+    <input type="search" class="search" placeholder="Search by title" aria-label="Search tasks by title" maxlength="150" [(ngModel)]="search" (ngModelChange)="onSearchChange($event)" />
+    <select aria-label="Filter by status" [(ngModel)]="status" (ngModelChange)="onFilterChange()">
+      <option value="">All statuses</option>
+      <option value="Pending">Pending</option>
+      <option value="In Progress">In Progress</option>
+      <option value="Completed">Completed</option>
+    </select>
+    <select aria-label="Filter by priority" [(ngModel)]="priority" (ngModelChange)="onFilterChange()">
+      <option value="">All priorities</option>
+      <option value="Low">Low</option>
+      <option value="Medium">Medium</option>
+      <option value="High">High</option>
+    </select>
+  </div>
+
+  <div *ngIf="loading" class="state loading" role="status" aria-live="polite"><span class="spinner" aria-hidden="true"></span>Loading tasks&hellip;</div>
+  <div *ngIf="error" class="state error" role="alert">{{ error }}</div>
+
+  <div class="table-container" *ngIf="!loading && !error">
+    <table *ngIf="tasks.length > 0; else noTasks">
+      <caption class="sr-only">Task list</caption>
+      <thead>
+        <tr>
+          <th scope="col">Title</th>
+          <th scope="col">Assigned to</th>
+          <th scope="col">Priority</th>
+          <th scope="col">Due date</th>
+          <th scope="col">Status</th>
+          <th scope="col"><span class="sr-only">Actions</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let task of tasks; trackBy: trackTask">
+          <td class="title-cell">{{ task.title }}</td>
+          <td>{{ task.assigned_to }}</td>
+          <td><span class="priority" [class]="getPriorityClass(task.priority)"><span class="dot" aria-hidden="true"></span>{{ task.priority }}</span></td>
+          <td class="date-cell">{{ task.due_date | date:'dd MMM yyyy' }}</td>
+          <td><span class="badge" [class]="getStatusClass(task.status)"><span class="dot" aria-hidden="true"></span>{{ task.status }}</span></td>
+          <td>
+            <div class="actions">
+              <a [routerLink]="['/tasks/edit', task.id]" class="btn-edit">Edit</a>
+              <button type="button" (click)="deleteTask(task.id)" class="btn-delete" [disabled]="deleting" [attr.aria-label]="'Delete ' + task.title">Delete</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <ng-template #noTasks>
+      <div class="no-data"><p class="no-data-title">No tasks found</p><p>Try a different search or filter, or add a new task.</p></div>
+    </ng-template>
+  </div>
+
+  <nav *ngIf="!loading && !error && pagination.totalPages > 1" class="pagination" aria-label="Task list pages">
+    <span class="pagination-summary">Page <strong>{{ page }}</strong> of <strong>{{ pagination.totalPages }}</strong><ng-container *ngIf="paginationTotalKnown"> · {{ pagination.total }} total tasks</ng-container></span>
+    <div class="pagination-controls">
+      <label for="page-size">Per page</label>
+      <select id="page-size" [value]="pageSize" (change)="changePageSize($any($event.target).value)">
+        <option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option>
+      </select>
+      <button type="button" [disabled]="page === 1 || loading" (click)="goToPage(page - 1)">Previous</button>
+      <button type="button" [disabled]="!pagination.hasNextPage || loading" (click)="goToPage(page + 1)">Next</button>
+    </div>
+  </nav>
+</div>

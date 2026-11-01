@@ -1,0 +1,169 @@
+Dhananjay -> Technical Assignment – Task Management System
+
+Position: Junior Full-Stack Developer (Fresher)
+Technology: Angular 22, TypeScript, Node.js, Express.js, MySQL
+Duration: 2 Days
+Difficulty: Beginner to Intermediate
+
+1. Assignment Objective
+
+Develop a simple Task Management Web Application that allows users to create, view, edit, delete, and track tasks through an interactive dashboard.
+
+The frontend must be developed using Angular, and the backend must expose REST APIs using Node.js and Express.js.
+
+2. Functional Requirements
+
+Module 1 – Dashboard
+
+Create a dashboard displaying four summary cards:
+
+* Total Tasks
+* Pending Tasks
+* In Progress Tasks
+* Completed Tasks
+
+The dashboard counts must be calculated from actual database records.
+
+Module 2 – Task Management (CRUD)
+
+Create Task
+
+Create a form with the following fields:
+
+* Task Title
+* Description
+* Assigned To
+* Priority (Low / Medium / High)
+* Due Date
+* Status (Pending / In Progress / Completed)
+
+All required fields must be validated.
+
+View Tasks
+
+Display tasks in a table containing:
+
+* Task Title
+* Assigned To
+* Priority
+* Due Date
+* Status
+* Actions (Edit / Delete)
+
+Update Task
+
+Allow editing task information and changing task status.
+
+Delete Task
+
+Provide a delete option with a confirmation message.
+
+Module 3 – Search and Filter
+
+Implement the following features:
+
+* Search tasks by title.
+* Filter tasks by status.
+* Filter tasks by priority.
+
+Filters should work without reloading the entire webpage.
+
+3. Angular Frontend Requirements
+
+Use Angular 22 with the following concepts:
+
+* Standalone components
+* Angular routing
+* Reactive Forms
+* Angular services for API communication
+* HttpClient
+* Basic Signals or RxJS for state handling
+* Loading indicators and error messages
+* Responsive user interface
+
+Suggested Pages:
+
+1. Dashboard
+2. Task Listing
+3. Add / Edit Task
+
+Candidates may use Angular Material, Bootstrap, or basic CSS for styling.
+
+4. Node.js + Express.js Backend
+
+Develop the following REST APIs:
+
+Method	Endpoint	Purpose
+GET	/api/tasks	Fetch all tasks
+GET	/api/tasks/:id	Get task details
+POST	/api/tasks	Create task
+PUT	/api/tasks/:id	Update task
+DELETE	/api/tasks/:id	Delete task
+GET	/api/dashboard/summary	Get task counts
+
+Backend Requirements:
+
+* Express.js server
+* MySQL integration
+* Proper API status codes
+* Input validation
+* Error handling
+* Organized routes and controllers
+* Environment variables for database configuration
+
+5. Database
+
+Create a MySQL table named tasks.
+
+Field	Type
+id	INT, Primary Key, Auto Increment
+title	VARCHAR(150)
+description	TEXT
+assigned_to	VARCHAR(100)
+priority	ENUM
+due_date	DATE
+status	ENUM
+created_at	TIMESTAMP
+
+6. Expected Deliverables
+
+* Angular frontend source code
+* Express.js backend source code
+* MySQL database creation script
+* README with installation instructions
+* Postman API collection
+* Application screenshots
+* GitHub repository or ZIP file
+
+7. Evaluation Criteria
+
+Evaluation Criteria	Weightage
+Angular architecture and components	20%
+REST API development	20%
+CRUD functionality and database	20%
+Frontend/backend integration	20%
+Search, filtering and dashboard	10%
+Validation, code quality and README	10%
+Total	100%
+
+8. Submission Guidelines
+
+Time Limit: 2 Days
+
+Mandatory:
+
+* Fully working CRUD operations
+* Functional API integration
+* MySQL data persistence
+* Working dashboard with task counts
+* Basic form validation
+
+Not Required:
+
+* Login or authentication
+* Role-based access
+* Cloud deployment
+* Advanced UI animations
+* Third-party paid services
+
+Candidates must be able to demonstrate their application and explain their implementation during the technical review.

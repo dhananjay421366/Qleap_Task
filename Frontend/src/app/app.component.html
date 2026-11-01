@@ -1,0 +1,21 @@
+<nav class="navbar">
+  <div class="container">
+    <a routerLink="/dashboard" class="logo">Task Manager</a>
+    <div class="nav-links">
+      <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+      <a routerLink="/tasks" routerLinkActive="active">Tasks</a>
+      <a routerLink="/tasks/add" routerLinkActive="active" class="btn-add">+ Add Task</a>
+    </div>
+  </div>
+</nav>
+
+@if (toastService.toast(); as currentToast) {
+  <div class="global-toast" [class.error-toast]="currentToast.type === 'error'" role="alert" aria-live="assertive">
+    <span>{{ currentToast.message }}</span>
+    <button type="button" aria-label="Close notification" (click)="toastService.close()">&times;</button>
+  </div>
+}
+
+<main class="main-content">
+  <router-outlet></router-outlet>
+</main>

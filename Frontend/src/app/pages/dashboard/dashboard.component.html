@@ -1,0 +1,27 @@
+<div class="dashboard">
+  <header class="page-head">
+    <h1>Dashboard</h1>
+    <p class="sub">Where your tasks stand right now</p>
+  </header>
+
+  <div *ngIf="loading" class="state loading" role="status" aria-live="polite"><span class="spinner" aria-hidden="true"></span>Loading your tasks&hellip;</div>
+  <div *ngIf="error" class="state error" role="alert">{{ error }}</div>
+
+  <ng-container *ngIf="!loading && !error">
+    <section class="overview" aria-label="Task progress">
+      <div class="overview-top">
+        <div class="overview-total"><span class="big">{{ summary.totalTasks }}</span><span class="big-label">total tasks</span></div>
+        <div class="overview-done"><span class="pct">{{ summary.totalTasks ? ((summary.completedTasks * 100) / summary.totalTasks).toFixed(0) : 0 }}%</span><span class="big-label">completed</span></div>
+      </div>
+      <div class="bar" role="img" [attr.aria-label]="summary.completedTasks + ' completed, ' + summary.inProgressTasks + ' in progress, ' + summary.pendingTasks + ' pending'">
+        <span class="seg done" [style.flex-grow]="summary.completedTasks"></span><span class="seg doing" [style.flex-grow]="summary.inProgressTasks"></span><span class="seg waiting" [style.flex-grow]="summary.pendingTasks"></span>
+      </div>
+    </section>
+    <div class="cards">
+      <div class="card total"><h3><span class="dot"></span>Total tasks</h3><p class="count">{{ summary.totalTasks }}</p></div>
+      <div class="card pending"><h3><span class="dot"></span>Pending</h3><p class="count">{{ summary.pendingTasks }}</p></div>
+      <div class="card progress"><h3><span class="dot"></span>In progress</h3><p class="count">{{ summary.inProgressTasks }}</p></div>
+      <div class="card completed"><h3><span class="dot"></span>Completed</h3><p class="count">{{ summary.completedTasks }}</p></div>
+    </div>
+  </ng-container>
+</div>
