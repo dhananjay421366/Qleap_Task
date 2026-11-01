@@ -21,6 +21,20 @@
       }
     },
     {
+      "name": "Readiness Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5000/health/ready",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["health", "ready"]
+        }
+      }
+    },
+    {
       "name": "Dashboard Summary",
       "request": {
         "method": "GET",

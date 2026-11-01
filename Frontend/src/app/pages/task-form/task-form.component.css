@@ -13,7 +13,12 @@
   display: block;
   padding: clamp(1.25rem, 4vw, 3rem);
   color: var(--ink);
-  font-family: "Schibsted Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-family:
+    'Schibsted Grotesk',
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    sans-serif;
 }
 
 .form-container {
@@ -25,16 +30,23 @@
   padding: clamp(1.25rem, 4vw, 2.5rem);
 }
 
-.form-head { margin-bottom: 1.75rem; }
+.form-head {
+  margin-bottom: 1.75rem;
+}
 .form-head h1 {
   margin: 0;
   font-size: clamp(1.5rem, 4vw, 2rem);
   font-weight: 700;
   letter-spacing: -0.02em;
 }
-.sub { margin: 0.35rem 0 0; color: var(--muted); }
+.sub {
+  margin: 0.35rem 0 0;
+  color: var(--muted);
+}
 
-.form-group { margin-bottom: 1.25rem; }
+.form-group {
+  margin-bottom: 1.25rem;
+}
 
 .form-group label {
   display: block;
@@ -42,7 +54,9 @@
   font-weight: 600;
   font-size: 0.95rem;
 }
-.req { color: var(--danger); }
+.req {
+  color: var(--danger);
+}
 
 .form-group input,
 .form-group select,
@@ -55,10 +69,17 @@
   font: inherit;
   color: var(--ink);
   background: var(--surface);
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
-.form-group textarea { resize: vertical; min-height: 5.5rem; }
-.form-group ::placeholder { color: #8d9bb0; }
+.form-group textarea {
+  resize: vertical;
+  min-height: 5.5rem;
+}
+.form-group ::placeholder {
+  color: #8d9bb0;
+}
 
 .form-group select {
   appearance: none;
@@ -70,7 +91,9 @@
 
 .form-group input:hover,
 .form-group select:hover,
-.form-group textarea:hover { border-color: #a9b5c7; }
+.form-group textarea:hover {
+  border-color: #a9b5c7;
+}
 
 .form-group input:focus-visible,
 .form-group select:focus-visible,
@@ -83,8 +106,12 @@
 /* Angular adds these classes after the field is touched */
 .form-group input.ng-invalid.ng-touched,
 .form-group select.ng-invalid.ng-touched,
-.form-group textarea.ng-invalid.ng-touched { border-color: var(--danger); }
-.form-group input.ng-invalid.ng-touched:focus-visible { box-shadow: 0 0 0 3px rgba(180, 35, 24, 0.2); }
+.form-group textarea.ng-invalid.ng-touched {
+  border-color: var(--danger);
+}
+.form-group input.ng-invalid.ng-touched:focus-visible {
+  box-shadow: 0 0 0 3px rgba(180, 35, 24, 0.2);
+}
 
 .form-row {
   display: grid;
@@ -128,20 +155,47 @@
   text-decoration: none;
   transition: background-color 0.15s ease;
 }
-.btn:focus-visible { outline: 3px solid rgba(47, 91, 234, 0.35); outline-offset: 2px; }
+.btn:focus-visible {
+  outline: 3px solid rgba(47, 91, 234, 0.35);
+  outline-offset: 2px;
+}
 
-.btn-primary { background: var(--accent); color: #fff; }
-.btn-primary:hover:not(:disabled) { background: var(--accent-hover); }
-.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+.btn-primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
 
-.btn-secondary { background: var(--surface); color: var(--ink); border-color: var(--field-line); }
-.btn-secondary:hover { background: var(--bg); }
+.btn-secondary {
+  background: var(--surface);
+  color: var(--ink);
+  border-color: var(--field-line);
+}
+.btn-secondary:hover {
+  background: var(--bg);
+}
 
 @media (max-width: 650px) {
-  .form-row { grid-template-columns: 1fr; gap: 0; }
-  .form-actions { flex-direction: column-reverse; }
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .form-actions {
+    flex-direction: column-reverse;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .form-group input, .form-group select, .form-group textarea, .btn { transition: none; }
+  .form-group input,
+  .form-group select,
+  .form-group textarea,
+  .btn {
+    transition: none;
+  }
 }

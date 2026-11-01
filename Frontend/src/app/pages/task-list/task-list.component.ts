@@ -3,7 +3,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Subject } from 'rxjs';
-import { auditTime, debounceTime, distinctUntilChanged, finalize, takeUntil, timeout } from 'rxjs/operators';
+import {
+  auditTime,
+  debounceTime,
+  distinctUntilChanged,
+  finalize,
+  takeUntil,
+  timeout,
+} from 'rxjs/operators';
 import { TaskService } from '../../core/services/task.service';
 import { ToastService } from '../../core/services/toast.service';
 import { Task, TaskFilters, TaskPagination } from '../../shared/models/task.model';
@@ -64,50 +71,64 @@ export class TaskListComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.error = '';
 
-    this.taskService.getTasks(this.currentFilters()).pipe(
-      timeout({ each: 10000 }),
-      takeUntil(this.destroy$),
-      finalize(() => {
-        if (requestId === this.requestSequence) {
+    this.taskService
+      .getTasks(this.currentFilters())
+      .pipe(
+        timeout({ each: 10000 }),
+        takeUntil(this.destroy$),
+        finalize(() => {
+          if (requestId === this.requestSequence) {
+            this.loading = false;
+            this.changeDetectorRef.detectChanges();
+          }
+        }),
+      )
+      .subscribe({
+        next: (response) => {
+          if (requestId !== this.requestSequence) return;
           this.loading = false;
+
+          // Support both the current paginated API and older deployments that
+          // return only { data, count }.
+          const tasks = Array.isArray(response?.data) ? response.data : [];
+          const serverPagination = response?.pagination;
+          const hasNextPage = Boolean(
+            serverPagination?.hasNextPage ?? tasks.length === this.pageSize,
+          );
+          const total = Number(
+            serverPagination?.total ??
+              (hasNextPage ? this.page * this.pageSize + 1 : (response?.count ?? tasks.length)),
+          );
+          const pageSize = Number(serverPagination?.pageSize ?? this.pageSize);
+          const page = Number(serverPagination?.page ?? this.page);
+          const totalPages = Number(
+            serverPagination?.totalPages ??
+              (hasNextPage ? page + 1 : Math.max(page, Math.ceil(total / pageSize))),
+          );
+
+          this.tasks = tasks;
+          this.page = page;
+          this.pageSize = pageSize;
+          this.paginationTotalKnown = serverPagination?.total !== undefined;
+          this.pagination = {
+            page,
+            pageSize,
+            total,
+            totalPages,
+            hasNextPage,
+          };
           this.changeDetectorRef.detectChanges();
-        }
-      }),
-    ).subscribe({
-      next: (response) => {
-        if (requestId !== this.requestSequence) return;
-        this.loading = false;
-
-        // Support both the current paginated API and older deployments that
-        // return only { data, count }.
-        const tasks = Array.isArray(response?.data) ? response.data : [];
-        const serverPagination = response?.pagination;
-        const hasNextPage = Boolean(serverPagination?.hasNextPage ?? tasks.length === this.pageSize);
-        const total = Number(serverPagination?.total ?? (hasNextPage ? this.page * this.pageSize + 1 : response?.count ?? tasks.length));
-        const pageSize = Number(serverPagination?.pageSize ?? this.pageSize);
-        const page = Number(serverPagination?.page ?? this.page);
-        const totalPages = Number(serverPagination?.totalPages ?? (hasNextPage ? page + 1 : Math.max(page, Math.ceil(total / pageSize))));
-
-        this.tasks = tasks;
-        this.page = page;
-        this.pageSize = pageSize;
-        this.paginationTotalKnown = serverPagination?.total !== undefined;
-        this.pagination = {
-          page,
-          pageSize,
-          total,
-          totalPages,
-          hasNextPage,
-        };
-        this.changeDetectorRef.detectChanges();
-      },
-      error: () => {
-        if (requestId !== this.requestSequence) return;
-        this.error = 'Failed to load tasks';
-        this.toastService.show('Unable to load tasks. The backend did not respond in time.', 'error');
-        this.changeDetectorRef.detectChanges();
-      },
-    });
+        },
+        error: () => {
+          if (requestId !== this.requestSequence) return;
+          this.error = 'Failed to load tasks';
+          this.toastService.show(
+            'Unable to load tasks. The backend did not respond in time.',
+            'error',
+          );
+          this.changeDetectorRef.detectChanges();
+        },
+      });
   }
 
   ngOnDestroy(): void {
@@ -160,19 +181,22 @@ export class TaskListComponent implements OnInit, OnDestroy {
     const id = this.pendingDeleteId;
     this.deleting = true;
 
-    this.taskService.deleteTask(id).pipe(takeUntil(this.destroy$)).subscribe({
-      next: () => {
-        this.toastService.show('Task deleted successfully.');
-        this.deleting = false;
-        this.cancelDelete();
-        if (this.page > 1 && this.tasks.length === 1) this.page--;
-        this.filterChanges$.next();
-      },
-      error: () => {
-        this.deleting = false;
-        this.toastService.show('Failed to delete task.', 'error');
-      },
-    });
+    this.taskService
+      .deleteTask(id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.toastService.show('Task deleted successfully.');
+          this.deleting = false;
+          this.cancelDelete();
+          if (this.page > 1 && this.tasks.length === 1) this.page--;
+          this.filterChanges$.next();
+        },
+        error: () => {
+          this.deleting = false;
+          this.toastService.show('Failed to delete task.', 'error');
+        },
+      });
   }
 
   getPriorityClass(priority: string): string {

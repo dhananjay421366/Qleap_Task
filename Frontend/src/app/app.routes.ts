@@ -9,5 +9,5 @@ export const routes: Routes = [
   { path: 'tasks', component: TaskListComponent },
   { path: 'tasks/add', component: TaskFormComponent },
   { path: 'tasks/edit/:id', component: TaskFormComponent },
-  { path: '**', redirectTo: 'dashboard' }
+  { path: '**', redirectTo: 'dashboard' },
 ];

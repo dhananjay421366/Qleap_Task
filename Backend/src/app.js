@@ -29,16 +29,19 @@ app.use((req, res, next) => {
   next();
 });
 
+// CORS Configuration
 const allowedOrigins = (process.env.CORS_ORIGINS)
   .split(",")
   .map((origin) => origin.trim())
   .map((origin) => new URL(origin).origin)
   .filter(Boolean);
 
+  // Rate Limiting Configuration
 const rateLimitWindowMs =
   Number(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000;
 const defaultRateLimit = Number(process.env.RATE_LIMIT_MAX) || 100;
 
+// Create a rate limiter middleware for read and write requests
 const createRateLimiter = (limit) =>
   rateLimit({
     windowMs: rateLimitWindowMs,

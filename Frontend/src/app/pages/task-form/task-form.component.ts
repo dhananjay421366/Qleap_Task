@@ -11,7 +11,7 @@ import { TaskPayload } from '../../shared/models/task.model';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './task-form.component.html',
-  styleUrl: './task-form.component.css'
+  styleUrl: './task-form.component.css',
 })
 export class TaskFormComponent implements OnInit {
   readonly taskForm: FormGroup;
@@ -26,7 +26,7 @@ export class TaskFormComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private changeDetectorRef: ChangeDetectorRef,
-    private toastService: ToastService
+    private toastService: ToastService,
   ) {
     this.taskForm = this.fb.group({
       title: ['', [Validators.required, Validators.maxLength(150)]],
@@ -34,7 +34,7 @@ export class TaskFormComponent implements OnInit {
       assigned_to: ['', [Validators.required, Validators.maxLength(100)]],
       priority: ['Medium', Validators.required],
       due_date: ['', Validators.required],
-      status: ['Pending', Validators.required]
+      status: ['Pending', Validators.required],
     });
   }
 
@@ -66,7 +66,7 @@ export class TaskFormComponent implements OnInit {
           assigned_to: task.assigned_to,
           priority: task.priority,
           due_date: task.due_date?.split('T')[0],
-          status: task.status
+          status: task.status,
         });
         this.loading = false;
         this.changeDetectorRef.markForCheck();
@@ -75,7 +75,7 @@ export class TaskFormComponent implements OnInit {
         this.error = 'Failed to load task';
         this.loading = false;
         this.changeDetectorRef.markForCheck();
-      }
+      },
     });
   }
 
@@ -103,7 +103,7 @@ export class TaskFormComponent implements OnInit {
     request.subscribe({
       next: () => {
         this.toastService.show(
-          this.isEditMode ? 'Task updated successfully.' : 'Task created successfully.'
+          this.isEditMode ? 'Task updated successfully.' : 'Task created successfully.',
         );
         this.router.navigate(['/tasks']);
       },
@@ -112,7 +112,7 @@ export class TaskFormComponent implements OnInit {
         this.loading = false;
         this.toastService.show(this.error, 'error');
         this.changeDetectorRef.markForCheck();
-      }
+      },
     });
   }
 }
